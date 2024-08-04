@@ -1,0 +1,62 @@
+name: aakar_ai
+description: "A new Flutter project."
+
+publish_to: 'none'
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.5.0-180.3.beta <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_svg: ^2.0.10+1
+  flutter_screenutil: ^5.9.3
+  video_player: ^2.9.1
+  carousel_slider: ^4.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+
+flutter:
+
+  uses-material-design: true
+
+
+  assets:
+    - assets/images/
+    
+    - assets/fonts/
+  
+  fonts:
+    - family: Helvetica
+      fonts:
+        - asset: assets/fonts/Helvetica.ttf
+    - family: HelveticaCondensedMedium
+      fonts:
+        - asset: assets/fonts/HelveticaNeue-MediumCond.otf
+
+    - family: HelveticaCondensedBlack
+      fonts:
+        - asset: assets/fonts/HelveticaNeueCondensedBlack.ttf
+
+
+    - family: HelveticaMedium
+      fonts:
+        - asset: assets/fonts/HelveticaNeueMedium.ttf
+
+    - family: HelveticaBold
+      fonts:
+        - asset: assets/fonts/HelveticaNeueBold.ttf
+    - family: HelveticaLight
+      fonts:
+        - asset: assets/fonts/HelveticaNeueLight.ttf
+    

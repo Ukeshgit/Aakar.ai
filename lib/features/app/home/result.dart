@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:aakar_ai/features/app/global/theme/colors.dart';
 import 'package:aakar_ai/features/user/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ class Result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? _base64Image;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -56,9 +59,9 @@ class Result extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Image.asset(
-                        "assets/images/ai_image.jpg",
-                      ),
+                      _base64Image != null
+                          ? Image.memory(base64Decode(_base64Image!))
+                          : Container(),
                       SizedBox(
                         height: 15.h,
                       ),

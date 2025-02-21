@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
 
   final List<Widget> pages = [
     const HomeScreen(),
-    CollectionScreen(),
+    Container(),
     ProfileScreen(),
   ];
 

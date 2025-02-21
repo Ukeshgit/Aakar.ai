@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:aakar_ai/features/api_helper.dart/api_helper.dart';
 import 'package:aakar_ai/features/app/global/theme/background_color.dart';
 import 'package:aakar_ai/features/app/global/theme/colors.dart';
 import 'package:aakar_ai/features/app/home/advanced_screen.dart';
@@ -17,7 +20,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _promptController = TextEditingController();
+  String? _base64Image;
+  Future<void> _generateImage() async {
+    String? image = await ApiService.generateImage(_promptController.text);
+    if (image != null) {
+      setState(() {
+        _base64Image = image;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to generate image")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontFamily: 'HelveticaBold')),
                                 SizedBox(height: 10.h),
                                 TextField(
-                                  controller: _textEditingController,
+                                  controller: _promptController,
                                   style: TextStyle(color: rabbitWhite),
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -78,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      _textEditingController.text =
+                                      _promptController.text =
                                           "A highly detailed and photorealistic portrait of a young girl with curly blue hair, bright blue eyes, and freckles. She has a gentle and serene expression, set against a softly blurred background. The lighting is warm and natural, emphasizing her features and giving the image a dreamy, artistic quality.";
                                     });
                                   },
@@ -96,6 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 30.h,
                       ),
+                      _base64Image != null
+                          ? Image.memory(base64Decode(_base64Image!))
+                          : Container(),
                       Row(
                         children: [
                           Container(
@@ -240,13 +259,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 20.h,
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Result(),
-                              ));
-                        },
+                        onTap: _generateImage,
+                        //() {
+
+                        //   // Navigator.push(
+                        //   //     context,
+                        //   //     MaterialPageRoute(
+                        //   //       builder: (context) => Result(),
+                        //   //     ));
+                        // },
                         child: CustomButton1(
                             color2: Colors.blueAccent,
                             color: deepblue,

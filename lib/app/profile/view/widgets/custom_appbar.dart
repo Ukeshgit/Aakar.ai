@@ -1,4 +1,5 @@
-import 'package:aakar_ai/features/app/global/theme/colors.dart';
+import 'package:aakar_ai/const/colors.dart';
+import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -29,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 1,
       backgroundColor: Colors.black,
       actions: [
-        GestureDetector(
+        Bounce(
           onTap: ontap,
           child: Container(
             margin: EdgeInsets.only(right: 10.w),

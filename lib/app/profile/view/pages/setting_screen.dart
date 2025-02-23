@@ -1,6 +1,4 @@
-import 'package:aakar_ai/features/app/global/theme/background_color.dart';
-import 'package:aakar_ai/features/app/global/theme/colors.dart';
-import 'package:aakar_ai/features/user/widgets/custom_appbar.dart';
+import 'package:aakar_ai/const/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

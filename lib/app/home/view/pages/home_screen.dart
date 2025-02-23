@@ -1,16 +1,16 @@
 import 'dart:convert';
-
-import 'package:aakar_ai/features/api_helper.dart/api_helper.dart';
-import 'package:aakar_ai/features/app/global/theme/background_color.dart';
-import 'package:aakar_ai/features/app/global/theme/colors.dart';
-import 'package:aakar_ai/features/app/home/advanced_screen.dart';
-import 'package:aakar_ai/features/app/home/result.dart';
-import 'package:aakar_ai/features/app/splash_screen/splash_screen.dart';
-import 'package:aakar_ai/features/user/widgets/custom_appbar.dart';
-import 'package:aakar_ai/features/user/widgets/custom_button.dart';
+import 'package:aakar_ai/app/home/view/pages/advanced_screen.dart';
+import 'package:aakar_ai/app/profile/view/widgets/custom_appbar.dart';
+import 'package:aakar_ai/app/profile/view/widgets/custom_button.dart';
+import 'package:aakar_ai/const/background_color.dart';
+import 'package:aakar_ai/const/colors.dart';
+import 'package:aakar_ai/utils/api_endpoint/api_helper.dart';
+import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,9 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _base64Image = image;
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to generate image")),
-      );
+      Get.snackbar("Error", "Failed to generate image",
+          colorText: Colors.black, backgroundColor: Colors.red);
     }
   }
 
@@ -91,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   maxLines:
                                       null, // Allow the text field to be multi-line if necessary
                                 ),
-                                GestureDetector(
+                                Bounce(
                                   onTap: () {
                                     setState(() {
                                       _promptController.text =
@@ -117,79 +116,86 @@ class _HomeScreenState extends State<HomeScreen> {
                           : Container(),
                       Row(
                         children: [
-                          Container(
-                              height: 70.h,
-                              width: 170.w,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: deepblue, width: 1),
-                                  color: backgroundColor,
-                                  borderRadius: BorderRadius.circular(30.r)),
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15.w, vertical: 20.h),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.history_rounded,
-                                        color: rabbitWhite,
-                                        size: 20.sp,
-                                      ),
-                                      SizedBox(
-                                        width: 10.w,
-                                      ),
-                                      Text(
-                                        "Prompt History",
-                                        style: TextStyle(
-                                            color: rabbitWhite,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 15.sp,
-                                            fontFamily: 'Helvetica'),
-                                      )
-                                    ],
-                                  ))),
+                          Bounce(
+                            onTap: () {},
+                            child: Container(
+                                height: 70.h,
+                                width: 170.w,
+                                decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: deepblue, width: 1),
+                                    color: backgroundColor,
+                                    borderRadius: BorderRadius.circular(30.r)),
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15.w, vertical: 20.h),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.history_rounded,
+                                          color: rabbitWhite,
+                                          size: 20.sp,
+                                        ),
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        Text(
+                                          "Prompt History",
+                                          style: TextStyle(
+                                              color: rabbitWhite,
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 15.sp,
+                                              fontFamily: 'Helvetica'),
+                                        )
+                                      ],
+                                    ))),
+                          ),
                           SizedBox(
                             width: 10.w,
                           ),
                           Row(
                             children: [
-                              Container(
-                                  height: 70.h,
-                                  width: 170.w,
-                                  decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: deepblue, width: 1),
-                                      color: backgroundColor,
-                                      borderRadius:
-                                          BorderRadius.circular(30.r)),
-                                  child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w, vertical: 20.h),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 20.w,
-                                          ),
-                                          Text(
-                                            "Style",
-                                            style: TextStyle(
-                                                fontSize: 15.sp,
-                                                color: rabbitWhite,
-                                                fontWeight: FontWeight.w300,
-                                                fontFamily: 'Helvetica'),
-                                          ),
-                                          SizedBox(
-                                            width: 50.w,
-                                          ),
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Icon(
-                                              Icons.add,
-                                              color: santasGray,
-                                              size: 23.sp,
+                              Bounce(
+                                onTap: () {},
+                                child: Container(
+                                    height: 70.h,
+                                    width: 170.w,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: deepblue, width: 1),
+                                        color: backgroundColor,
+                                        borderRadius:
+                                            BorderRadius.circular(30.r)),
+                                    child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.w, vertical: 20.h),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 20.w,
                                             ),
-                                          ),
-                                        ],
-                                      ))),
+                                            Text(
+                                              "Style",
+                                              style: TextStyle(
+                                                  fontSize: 15.sp,
+                                                  color: rabbitWhite,
+                                                  fontWeight: FontWeight.w300,
+                                                  fontFamily: 'Helvetica'),
+                                            ),
+                                            SizedBox(
+                                              width: 50.w,
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Icon(
+                                                Icons.add,
+                                                color: santasGray,
+                                                size: 23.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ))),
+                              ),
                             ],
                           )
                         ],
@@ -202,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: 180.w,
                           ),
-                          GestureDetector(
+                          Bounce(
                             onTap: () {
                               Navigator.push(
                                   context,
@@ -258,17 +264,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 20.h,
                       ),
-                      GestureDetector(
-                        onTap: _generateImage,
-                        //() {
-
-                        //   // Navigator.push(
-                        //   //     context,
-                        //   //     MaterialPageRoute(
-                        //   //       builder: (context) => Result(),
-                        //   //     ));
-                        // },
+                      Bounce(
                         child: CustomButton1(
+                            ontap: _generateImage,
                             color2: Colors.blueAccent,
                             color: deepblue,
                             text: "CREATE",

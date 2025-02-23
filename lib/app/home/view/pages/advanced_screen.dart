@@ -1,5 +1,5 @@
-import 'package:aakar_ai/features/app/global/theme/colors.dart';
-import 'package:aakar_ai/features/user/widgets/custom_button.dart';
+import 'package:aakar_ai/app/profile/view/widgets/custom_button.dart';
+import 'package:aakar_ai/const/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -71,11 +71,13 @@ class AdvancedScreen extends StatelessWidget {
                             height: 15.h,
                           ),
                           CustomButton1(
-                              text: "Upload Image",
-                              w: double.infinity,
-                              h: 60.h,
-                              color: mako,
-                              color2: rabbitWhite),
+                            text: "Upload Image",
+                            w: double.infinity,
+                            h: 60.h,
+                            color: mako,
+                            color2: rabbitWhite,
+                            ontap: () {},
+                          ),
                           SizedBox(
                             height: 20.h,
                           ),

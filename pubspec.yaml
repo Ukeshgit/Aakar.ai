@@ -14,12 +14,15 @@ dependencies:
   flutter:
     sdk: flutter
   
-
+  bounce: ^1.0.2
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.0.10+1
   flutter_screenutil: ^5.9.3
   # video_player: ^2.9.1
   carousel_slider: ^4.2.1
+  get_storage: ^2.1.1
+  get: ^4.7.2
+  
 
 dev_dependencies:
   flutter_test:

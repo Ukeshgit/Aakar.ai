@@ -1,7 +1,7 @@
 // import 'package:aakar_ai/features/app/global/theme/background_color.dart';
 // import 'package:aakar_ai/features/app/global/theme/colors.dart';
 // import 'package:aakar_ai/features/user/widgets/custom_appbar.dart';
-// // import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,8 +11,8 @@
 // }
 
 // class _CollectionScreenState extends State<CollectionScreen> {
-//   // final CarouselController _carouselController1 = CarouselController();
-//   // final CarouselController _carouselController2 = CarouselController();
+//   final CarouselController _carouselController1 = CarouselController();
+//   final CarouselController _carouselController2 = CarouselController();
 //   int currentIndex1 = 0;
 //   int currentIndex2 = 0;
 //   bool _carouselsRunning = false;
@@ -29,32 +29,32 @@
 //     {"id": 3, "image_path": "assets/images/carousel6.jpg"},
 //   ];
 
-//   // @override
-//   // void initState() {
-//   //   super.initState();
-//   //   WidgetsBinding.instance.addPostFrameCallback((_) {
-//   //     if (!_carouselsRunning) {
-//   //       _carouselsRunning = true;
-//   //       _startCarousels();
-//   //     }
-//   //   });
-//   // }
+//   @override
+//   void initState() {
+//     super.initState();
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       if (!_carouselsRunning) {
+//         _carouselsRunning = true;
+//         _startCarousels();
+//       }
+//     });
+//   }
 
-//   // void _startCarousels() {
-//   //   Future.delayed(const Duration(milliseconds: 1000), () {
-//   //     if (mounted) {
-//   //       _carouselController1.previousPage(
-//   //         duration: const Duration(milliseconds: 1000),
-//   //         curve: Curves.linear,
-//   //       );
-//   //       _carouselController2.nextPage(
-//   //         duration: const Duration(milliseconds: 1000),
-//   //         curve: Curves.linear,
-//   //       );
-//   //       _startCarousels();
-//   //     }
-//   //   });
-//   // }
+//   void _startCarousels() {
+//     Future.delayed(const Duration(milliseconds: 1000), () {
+//       if (mounted) {
+//         _carouselController1.previousPage(
+//           duration: const Duration(milliseconds: 1000),
+//           curve: Curves.linear,
+//         );
+//         _carouselController2.nextPage(
+//           duration: const Duration(milliseconds: 1000),
+//           curve: Curves.linear,
+//         );
+//         _startCarousels();
+//       }
+//     });
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@
 //                   ),
 //                 ),
 //                 CarouselSlider(
-//                   // carouselController: _carouselController1,
+//                   carouselController: _carouselController1,
 //                   options: CarouselOptions(
 //                     height: 168.w,
 //                     pageSnapping: false,
@@ -112,7 +112,7 @@
 //                   height: 16.w,
 //                 ),
 //                 CarouselSlider(
-//                   // carouselController: _carouselController2,
+//                   carouselController: _carouselController2,
 //                   options: CarouselOptions(
 //                     height: 168.w,
 //                     pageSnapping: false,

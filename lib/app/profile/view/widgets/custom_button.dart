@@ -1,4 +1,4 @@
-import 'package:aakar_ai/features/app/global/theme/colors.dart';
+import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -38,32 +38,36 @@ class CustomButton1 extends StatelessWidget {
   final double h;
   final Color color;
   final Color color2;
-  const CustomButton1({
-    super.key,
-    required this.text,
-    required this.w,
-    required this.h,
-    required this.color,
-    required this.color2,
-  });
+  final Function() ontap;
+  const CustomButton1(
+      {super.key,
+      required this.text,
+      required this.w,
+      required this.h,
+      required this.color,
+      required this.color2,
+      required this.ontap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: h,
-      width: w,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(35.r),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-              color: color2,
-              fontWeight: FontWeight.bold,
-              fontSize: 19.sp,
-              fontFamily: "HelveticaMedium"),
+    return Bounce(
+      onTap: ontap,
+      child: Container(
+        height: h,
+        width: w,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(35.r),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+                color: color2,
+                fontWeight: FontWeight.bold,
+                fontSize: 19.sp,
+                fontFamily: "HelveticaMedium"),
+          ),
         ),
       ),
     );

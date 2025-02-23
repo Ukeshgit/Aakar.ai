@@ -1,7 +1,6 @@
-import 'package:aakar_ai/features/app/collection/collection_screen.dart';
-import 'package:aakar_ai/features/app/global/profile/profile_screen.dart';
-import 'package:aakar_ai/features/app/global/theme/colors.dart';
-import 'package:aakar_ai/features/app/home/home_screen.dart';
+import 'package:aakar_ai/app/home/view/pages/home_screen.dart';
+import 'package:aakar_ai/app/profile/view/pages/profile_screen.dart';
+import 'package:aakar_ai/const/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

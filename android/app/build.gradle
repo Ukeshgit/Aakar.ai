@@ -7,22 +7,21 @@ plugins {
 
 android {
     namespace = "com.example.aakar_ai"
-     compileSdk = flutter.compileSdkVersion ?: 34
-    ndkVersion = flutter.ndkVersion ?: "23.1.7779620"
+     compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-  kotlinOptions {
-        jvmTarget = "1.8"
-    }
+kotlinOptions {
+    jvmTarget = "1.8" // Change this to match your Java version
+}
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.aakar_ai"
        minSdk = 24
-        targetSdk = flutter.targetSdkVersion ?: 34
+        targetSdk = flutter.targetSdkVersion 
         versionCode = 1
         versionName = "1.0.0"
         multiDexEnabled = true

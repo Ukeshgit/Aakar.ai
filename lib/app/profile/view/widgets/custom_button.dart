@@ -1,3 +1,4 @@
+import 'package:aakar_ai/const/colors.dart';
 import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,19 +34,20 @@ class CustomButton extends StatelessWidget {
 }
 
 class CustomButton1 extends StatelessWidget {
-  final String text;
+  final Widget child;
+  final Widget? prefix;
   final double w;
   final double h;
   final Color color;
-  final Color color2;
+
   final Function() ontap;
   const CustomButton1(
       {super.key,
-      required this.text,
+      required this.child,
+      this.prefix,
       required this.w,
       required this.h,
       required this.color,
-      required this.color2,
       required this.ontap});
 
   @override
@@ -59,15 +61,13 @@ class CustomButton1 extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(35.r),
         ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-                color: color2,
-                fontWeight: FontWeight.bold,
-                fontSize: 19.sp,
-                fontFamily: "HelveticaMedium"),
-          ),
+        child: Stack(
+          alignment: Alignment.center, // Ensures child remains centered
+          children: [
+            prefix ?? Container(),
+
+            Center(child: child), // Ensures child is always in the center
+          ],
         ),
       ),
     );

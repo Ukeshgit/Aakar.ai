@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:aakar_ai/app/home/controller/generating_controller.dart';
 import 'package:aakar_ai/app/home/view/pages/advanced_screen.dart';
+import 'package:aakar_ai/app/home/view/pages/prompt_screen.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_appbar.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_button.dart';
 import 'package:aakar_ai/const/background_color.dart';
@@ -8,9 +10,8 @@ import 'package:aakar_ai/utils/api_endpoint/api_helper.dart';
 import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
+import 'package:get_storage/get_storage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,17 +21,67 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController _promptController = TextEditingController();
+  GeneratingController generatingController = Get.put(GeneratingController());
+  final TextEditingController _promptController = TextEditingController();
+
   String? _base64Image;
+  final box = GetStorage();
+  @override
+  void initState() {
+    super.initState();
+
+    // Load saved prompt if it exists
+    _promptController.text = box.read('prompt') ?? '';
+  }
+
+  void dispose() {
+    _promptController.dispose();
+
+    super.dispose();
+  }
+
   Future<void> _generateImage() async {
+    generatingController.generate();
     String? image = await ApiService.generateImage(_promptController.text);
     if (image != null) {
       setState(() {
         _base64Image = image;
       });
+      String prompt = _promptController.text.trim();
+      if (prompt.isNotEmpty) {
+        List<String> prompts = box.read<List>('prompts')?.cast<String>() ?? [];
+        prompts.add(prompt);
+        box.write('prompts', prompts);
+        _promptController.clear();
+        generatingController.isLoading.value = false;
+      }
     } else {
-      Get.snackbar("Error", "Failed to generate image",
-          colorText: Colors.black, backgroundColor: Colors.red);
+      Get.snackbar(
+        "Error",
+        "Failed to generate image",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.blueAccent,
+        colorText: Colors.white,
+        margin: const EdgeInsets.all(10),
+        borderRadius: 8,
+        messageText: const Text(
+          "Failed to generate image",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        titleText: const Text(
+          "Error",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+      generatingController.isLoading.value = false;
     }
   }
 
@@ -78,10 +129,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 TextField(
                                   controller: _promptController,
                                   style: TextStyle(color: rabbitWhite),
+                                  onChanged: (value) {
+                                    box.write('prompt',
+                                        value); // Save input in GetStorage
+                                  },
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText:
-                                          "Type here in the detailed word what\n you want to see in your artwork",
+                                          "Type here in the detailed word what you want to see in your artwork",
                                       hintStyle: TextStyle(
                                           color: mako,
                                           fontSize: 16.sp,
@@ -117,7 +172,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Bounce(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(() => PromptScreen());
+                            },
                             child: Container(
                                 height: 70.h,
                                 width: 170.w,
@@ -213,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => AdvancedScreen()));
+                                      builder: (context) =>
+                                          const AdvancedScreen()));
                             },
                             child: Row(
                               children: [
@@ -264,15 +322,51 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 20.h,
                       ),
-                      Bounce(
-                        child: CustomButton1(
-                            ontap: _generateImage,
-                            color2: Colors.blueAccent,
-                            color: deepblue,
-                            text: "CREATE",
-                            w: double.infinity,
-                            h: 65.h),
-                      ),
+                      Obx(() {
+                        if (generatingController.isLoading.value) {
+                          return Bounce(
+                            child: CustomButton1(
+                                prefix: Positioned(
+                                  left: 15.w,
+                                  child: SizedBox(
+                                    height: 35.h,
+                                    width: 35.w,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: edtraaViolet,
+                                    ),
+                                  ),
+                                ),
+                                ontap: () {},
+                                color: deepblue,
+                                w: double.infinity,
+                                h: 65.h,
+                                child: Text(
+                                  "CREATING...",
+                                  style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 19.sp,
+                                      fontFamily: "HelveticaMedium"),
+                                )),
+                          );
+                        }
+                        return Bounce(
+                          child: CustomButton1(
+                              ontap: _generateImage,
+                              color: deepblue,
+                              w: double.infinity,
+                              h: 65.h,
+                              child: Text(
+                                "CREATE",
+                                style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 19.sp,
+                                    fontFamily: "HelveticaMedium"),
+                              )),
+                        );
+                      })
                     ])),
           ),
         ],

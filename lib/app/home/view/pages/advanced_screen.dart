@@ -71,12 +71,18 @@ class AdvancedScreen extends StatelessWidget {
                             height: 15.h,
                           ),
                           CustomButton1(
-                            text: "Upload Image",
                             w: double.infinity,
                             h: 60.h,
                             color: mako,
-                            color2: rabbitWhite,
                             ontap: () {},
+                            child: Text(
+                              "Upload Image",
+                              style: TextStyle(
+                                  color: rabbitWhite,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 19.sp,
+                                  fontFamily: "HelveticaMedium"),
+                            ),
                           ),
                           SizedBox(
                             height: 20.h,

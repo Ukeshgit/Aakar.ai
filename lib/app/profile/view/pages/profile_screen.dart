@@ -51,11 +51,17 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () {},
                       child: CustomButton1(
                           ontap: () {},
-                          color2: rabbitWhite,
                           color: edtraaViolet,
-                          text: "Create an account",
                           w: double.infinity,
-                          h: 50.h),
+                          h: 50.h,
+                          child: Text(
+                            "Create an account",
+                            style: TextStyle(
+                                color: rabbitWhite,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 19.sp,
+                                fontFamily: "HelveticaMedium"),
+                          )),
                     ),
                     SizedBox(
                       height: 14.h,

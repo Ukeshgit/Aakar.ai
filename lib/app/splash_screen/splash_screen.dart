@@ -1,7 +1,11 @@
 import 'dart:async';
+
+import 'package:aakar_ai/app/authentication/view/pages/auth_page.dart';
+import 'package:aakar_ai/app/authentication/view/pages/login_page.dart';
 import 'package:aakar_ai/app/home/view/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,6 +22,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _startProgress();
+    _navigateToHome();
+  }
+
+  _navigateToHome() async {
+    await Future.delayed(Duration(seconds: 2), () {
+      Get.offAll(() => const AuthPage());
+    });
+    // Adjust route as needed
   }
 
   void _startProgress() {
@@ -33,8 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (_progress >= 1.0) {
         timer.cancel();
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (context) => Home()));
       }
     });
   }

@@ -1,0 +1,2 @@
+D:/Desktop/Aakar.ai/android/app/.cxx/RelWithDebInfo/4t3t4u1v/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/Desktop/Aakar.ai/android/app/.cxx/RelWithDebInfo/4t3t4u1v/arm64-v8a/CMakeFiles/rebuild_cache.dir

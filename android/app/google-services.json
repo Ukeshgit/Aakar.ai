@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "161273741907",
+    "project_id": "aakar-fca3e",
+    "storage_bucket": "aakar-fca3e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161273741907:android:83d9874d166f28b069bca6",
+        "android_client_info": {
+          "package_name": "com.example.aakar_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv6ajVNGcXLtWOe2L4lGbD-vpe_DoXRgs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

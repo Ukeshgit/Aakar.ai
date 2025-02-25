@@ -36,7 +36,7 @@ class _PromptScreenState extends State<PromptScreen> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          backgroundColor: deepblue,
+          backgroundColor: Color(0xFF0D0D4D),
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);

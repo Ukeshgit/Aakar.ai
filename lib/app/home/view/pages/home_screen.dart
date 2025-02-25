@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:aakar_ai/app/home/controller/generating_controller.dart';
+import 'package:aakar_ai/app/home/controller/textfeild_controller.dart';
 import 'package:aakar_ai/app/home/view/pages/advanced_screen.dart';
+import 'package:aakar_ai/app/home/view/pages/home.dart';
 import 'package:aakar_ai/app/home/view/pages/prompt_screen.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_appbar.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_button.dart';
@@ -8,6 +10,7 @@ import 'package:aakar_ai/const/background_color.dart';
 import 'package:aakar_ai/const/colors.dart';
 import 'package:aakar_ai/utils/api_endpoint/api_helper.dart';
 import 'package:bounce/bounce.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -24,12 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
   GeneratingController generatingController = Get.put(GeneratingController());
   final TextEditingController _promptController = TextEditingController();
 
+  final TextFieldController controller = Get.put(TextFieldController());
+
   String? _base64Image;
   final box = GetStorage();
   @override
   void initState() {
     super.initState();
-
     // Load saved prompt if it exists
     _promptController.text = box.read('prompt') ?? '';
   }
@@ -130,6 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   controller: _promptController,
                                   style: TextStyle(color: rabbitWhite),
                                   onChanged: (value) {
+                                    controller.isDataPresent.value =
+                                        value.isNotEmpty;
                                     box.write('prompt',
                                         value); // Save input in GetStorage
                                   },
@@ -145,21 +151,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                   maxLines:
                                       null, // Allow the text field to be multi-line if necessary
                                 ),
-                                Bounce(
-                                  onTap: () {
-                                    setState(() {
-                                      _promptController.text =
-                                          "A highly detailed and photorealistic portrait of a young girl with curly blue hair, bright blue eyes, and freckles. She has a gentle and serene expression, set against a softly blurred background. The lighting is warm and natural, emphasizing her features and giving the image a dreamy, artistic quality.";
-                                    });
-                                  },
-                                  child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: 150.w, top: 10.h),
-                                      child: CustomButton(
-                                        text: "Surprise Me ",
-                                        w: 120.w,
-                                      )),
-                                ),
+                                Obx(() {
+                                  return controller.isDataPresent.value
+                                      ? Container()
+                                      : Bounce(
+                                          onTap: () {
+                                            setState(() {
+                                              _promptController.text =
+                                                  "A highly detailed and photorealistic portrait of a young girl with curly blue hair, bright blue eyes, and freckles. She has a gentle and serene expression, set against a softly blurred background. The lighting is warm and natural, emphasizing her features and giving the image a dreamy, artistic quality.";
+                                              controller.isDataPresent.value =
+                                                  true;
+                                              box.write('prompt',
+                                                  _promptController.text);
+                                            });
+                                          },
+                                          child: Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 150.w, top: 10.h),
+                                              child: CustomButton(
+                                                text: "Surprise Me ",
+                                                w: 120.w,
+                                              )),
+                                        );
+                                }),
                               ]),
                         ),
                       ),
@@ -331,8 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: SizedBox(
                                     height: 35.h,
                                     width: 35.w,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
+                                    child: CupertinoActivityIndicator(
+                                      radius: 15.sp,
                                       color: edtraaViolet,
                                     ),
                                   ),
@@ -353,14 +367,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                         return Bounce(
                           child: CustomButton1(
-                              ontap: _generateImage,
-                              color: deepblue,
+                              ontap: controller.isDataPresent.value
+                                  ? _generateImage
+                                  : () {},
+                              color: controller.isDataPresent.value
+                                  ? deepblue
+                                  : deepblue.withOpacity(0.5),
                               w: double.infinity,
                               h: 65.h,
                               child: Text(
                                 "CREATE",
                                 style: TextStyle(
-                                    color: Colors.blueAccent,
+                                    color: controller.isDataPresent.value
+                                        ? Colors.blueAccent
+                                        : Colors.lightBlue.withOpacity(0.5),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 19.sp,
                                     fontFamily: "HelveticaMedium"),

@@ -1,9 +1,19 @@
+import 'package:aakar_ai/app/profile/view/pages/about_us._page.dart';
+import 'package:aakar_ai/app/profile/view/pages/notification_screen.dart';
+import 'package:aakar_ai/app/profile/view/pages/privacy_policy_page.dart';
+import 'package:aakar_ai/app/profile/view/pages/tems_of_services_page.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_button.dart';
+import 'package:aakar_ai/app/profile/view/widgets/generate_user_id.dart';
 import 'package:aakar_ai/const/colors.dart';
+import 'package:aakar_ai/utils/api_endpoint/open_email.dart';
 import 'package:bounce/bounce.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -60,14 +70,16 @@ class SettingScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      settingInfo(
-                          Icons.person_add_alt_rounded, "Invite", () {}),
-                      Divider(
-                        thickness: 0.1,
-                        color: santasGray,
-                      ),
+                      // settingInfo(
+                      //     Icons.person_add_alt_rounded, "Invite", () {}),
+                      // Divider(
+                      //   thickness: 0.1,
+                      //   color: santasGray,
+                      // ),
                       settingInfo(Icons.notification_important_outlined,
-                          "Notifications", () {}),
+                          "Notifications", () {
+                        Get.to(() => NotificationScreen());
+                      }),
                       Divider(
                         thickness: 0.1,
                         color: santasGray,
@@ -75,28 +87,90 @@ class SettingScreen extends StatelessWidget {
                       settingInfo(
                         Icons.my_library_books_outlined,
                         "Terms of Services",
-                        () {},
+                        () {
+                          Get.to(() => TemsOfServicesPage());
+                        },
                       ),
                       Divider(
                         thickness: 0.1,
                         color: santasGray,
                       ),
-                      settingInfo(Icons.privacy_tip, "Privacy Policy", () {}),
+                      settingInfo(Icons.privacy_tip, "Privacy Policy", () {
+                        Get.to(() => PrivacyPolicyPage());
+                      }),
                       Divider(
                         thickness: 0.1,
                         color: santasGray,
                       ),
-                      settingInfo(Icons.developer_board, "About Us", () {}),
+                      settingInfo(Icons.developer_board, "About Us", () {
+                        Get.to(() => AboutUsPage());
+                      }),
                       Divider(
                         thickness: 0.13,
                         color: santasGray,
                       ),
-                      settingInfo(Icons.person, "User ID", () {}),
+                      settingInfo(
+                          suffix: Row(
+                            children: [
+                              Text(
+                                generateUserId(),
+                                style: TextStyle(color: mako, fontSize: 16.sp),
+                              ),
+                              SizedBox(
+                                width: 6.sp,
+                              ),
+                              Icon(
+                                Icons.copy_all_outlined,
+                                color: mako,
+                                size: 24.sp,
+                              )
+                            ],
+                          ),
+                          Icons.person,
+                          "User ID", () {
+                        Clipboard.setData(
+                            ClipboardData(text: generateUserId()));
+                        Get.snackbar(
+                          icon: Icon(
+                            Icons.check_circle,
+                            color: Colors.white,
+                          ),
+                          "User id Copied",
+                          "",
+                          snackPosition: SnackPosition.TOP,
+                          backgroundColor: Colors.blueAccent,
+                          colorText: Colors.white,
+                          margin: const EdgeInsets.all(10),
+                          borderRadius: 8,
+                          messageText: const Text(
+                            "User id Copied",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          titleText: const Text(
+                            "Success",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        );
+                      }),
                       Divider(
                         thickness: 0.1,
                         color: santasGray,
                       ),
-                      settingInfo(Icons.support, "Support", () {}),
+                      settingInfo(Icons.support, "Support", () {
+                        openEmail();
+                      },
+                          suffix: Text(
+                            'support@aakar.ai',
+                            style: TextStyle(color: mako, fontSize: 16.sp),
+                          )),
                       Divider(
                         thickness: 0.1,
                         color: santasGray,
@@ -109,6 +183,13 @@ class SettingScreen extends StatelessWidget {
                         thickness: 0.1,
                         color: santasGray,
                       ),
+                      Spacer(),
+                      Center(
+                        child: Text(
+                          '*For Major Project @2081*',
+                          style: TextStyle(color: mako, fontSize: 16.sp),
+                        ),
+                      ),
                     ]),
               ))
         ]));
@@ -119,8 +200,6 @@ class SettingScreen extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          var boxWidth = MediaQuery.of(context).size.width - 90;
-
           return AlertDialog(
             backgroundColor: mako,
             insetPadding: EdgeInsets.symmetric(horizontal: 16.h),
@@ -204,7 +283,8 @@ class SettingScreen extends StatelessWidget {
         });
   }
 
-  Widget settingInfo(IconData icon, String text, Function() ontap) {
+  Widget settingInfo(IconData icon, String text, Function() ontap,
+      {Widget? suffix}) {
     return Bounce(
       onTap: ontap,
       child: Container(
@@ -227,11 +307,12 @@ class SettingScreen extends StatelessWidget {
                   fontFamily: 'HelveticaBold'),
             ),
             Spacer(),
-            Icon(
-              Icons.keyboard_arrow_right_outlined,
-              color: mako,
-              size: 30.sp,
-            )
+            suffix ??
+                Icon(
+                  Icons.keyboard_arrow_right_outlined,
+                  color: mako,
+                  size: 30.sp,
+                )
           ],
         ),
       ),

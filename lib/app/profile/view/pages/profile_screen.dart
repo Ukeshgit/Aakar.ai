@@ -1,16 +1,44 @@
-import 'package:aakar_ai/app/home/controller/home_controller.dart';
+import 'dart:io';
+
 import 'package:aakar_ai/app/profile/view/widgets/custom_appbar.dart';
-import 'package:aakar_ai/app/profile/view/widgets/custom_button.dart';
+import 'package:aakar_ai/app/profile/view/widgets/generate_user_id.dart';
 import 'package:aakar_ai/const/background_color.dart';
 import 'package:aakar_ai/const/colors.dart';
 import 'package:aakar_ai/app/profile/view/pages/setting_screen.dart';
+import 'package:bounce/bounce.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final box = GetStorage();
+  final ImagePicker _picker = ImagePicker();
+
+  String? _imagePath;
+  @override
+  void initState() {
+    super.initState();
+    _imagePath = box.read('profile_image'); // Load saved image
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _imagePath = image.path;
+        box.write('profile_image', _imagePath); // Save image path
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,77 +63,43 @@ class ProfileScreen extends StatelessWidget {
           ),
           body: Stack(children: [
             GradientBackground(),
-            Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              child: Column(
+                children: [
+                  Row(
                     children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: Text(
-                          "Sign up to save your\n              art!",
-                          style: TextStyle(
-                              color: rabbitWhite,
-                              fontSize: 30.sp,
-                              fontFamily: 'HelveticaMedium'),
+                      Bounce(
+                        onTap: _pickImage,
+                        child: CircleAvatar(
+                          backgroundColor: mako,
+                          radius: 40.r,
+                          backgroundImage: _imagePath != null
+                              ? FileImage(File(_imagePath!))
+                              : null,
+                          child: _imagePath == null
+                              ? Image.asset(
+                                  "assets/images/user.png",
+                                  fit: BoxFit.cover,
+                                  height: 53.h,
+                                  width: 53.w,
+                                )
+                              : null,
                         ),
                       ),
                       SizedBox(
-                        height: 8.h,
+                        width: 26.w,
                       ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: CustomButton1(
-                            ontap: () {},
-                            color: edtraaViolet,
-                            w: double.infinity,
-                            h: 50.h,
-                            child: Text(
-                              "Create an account",
-                              style: TextStyle(
-                                  color: rabbitWhite,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 19.sp,
-                                  fontFamily: "HelveticaMedium"),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 14.h,
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 30.w,
-                            ),
-                            Text(
-                              "Already have an Account? ",
-                              style: TextStyle(
-                                  color: rabbitWhite,
-                                  fontSize: 16.sp,
-                                  fontFamily: 'HelveticaMedium'),
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: rabbitWhite,
-                                    color: iron,
-                                    fontSize: 16.sp,
-                                    fontFamily: 'HelveticaBold'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 33.h,
-                      ),
-                    ])),
+                      Text(
+                        FirebaseAuth.instance.currentUser!.displayName ??
+                            "Anonymous-${generateUserId()}".toString(),
+                        style: TextStyle(color: rabbitWhite),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )
           ])),
     );
   }

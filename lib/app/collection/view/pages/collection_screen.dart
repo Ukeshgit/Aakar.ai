@@ -41,6 +41,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: CustomAppBar(
+          suffix: Container(),
           ontap: () {},
           color: Colors.black,
           text: "AI STORE",

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:aakar_ai/app/home/controller/generating_controller.dart';
 import 'package:aakar_ai/app/home/controller/textfeild_controller.dart';
 import 'package:aakar_ai/app/home/view/pages/advanced_screen.dart';
 import 'package:aakar_ai/app/home/view/pages/home.dart';
 import 'package:aakar_ai/app/home/view/pages/prompt_screen.dart';
+import 'package:aakar_ai/app/home/view/pages/style_page.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_appbar.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_button.dart';
 import 'package:aakar_ai/const/background_color.dart';
@@ -42,6 +44,25 @@ class _HomeScreenState extends State<HomeScreen> {
     _promptController.dispose();
 
     super.dispose();
+  }
+
+  List<String> prompts = [
+    "A highly detailed and photorealistic portrait of a young girl with curly blue hair, bright blue eyes, and freckles. She has a gentle and serene expression, set against a softly blurred background. The lighting is warm and natural, emphasizing her features and giving the image a dreamy, artistic quality.",
+    "A futuristic city skyline at sunset, with neon lights reflecting on the glass buildings. The sky is painted in shades of orange, pink, and purple, giving the scene a cyberpunk aesthetic.",
+    "A mystical forest filled with glowing mushrooms and fireflies. A small wooden bridge crosses a crystal-clear stream, and the scene has a magical, fairytale-like atmosphere.",
+    "A warrior in golden armor standing on a battlefield at dawn, holding a massive sword. The sunlight glistens off their armor as they prepare for an epic battle.",
+    "A cat wearing steampunk goggles sitting on top of a flying airship, surrounded by floating islands in a sky filled with fluffy clouds."
+  ];
+
+  void _setRandomPrompt() {
+    final random = Random();
+    String randomPrompt = prompts[random.nextInt(prompts.length)];
+
+    setState(() {
+      _promptController.text = randomPrompt;
+      controller.isDataPresent.value = true;
+      box.write('prompt', randomPrompt);
+    });
   }
 
   Future<void> _generateImage() async {
@@ -94,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(
+        suffix: Container(),
         ontap: () {},
         color: Colors.black,
         text: "AI Art",
@@ -156,14 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ? Container()
                                       : Bounce(
                                           onTap: () {
-                                            setState(() {
-                                              _promptController.text =
-                                                  "A highly detailed and photorealistic portrait of a young girl with curly blue hair, bright blue eyes, and freckles. She has a gentle and serene expression, set against a softly blurred background. The lighting is warm and natural, emphasizing her features and giving the image a dreamy, artistic quality.";
-                                              controller.isDataPresent.value =
-                                                  true;
-                                              box.write('prompt',
-                                                  _promptController.text);
-                                            });
+                                            _setRandomPrompt();
                                           },
                                           child: Container(
                                               margin: EdgeInsets.only(
@@ -184,6 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? Image.memory(base64Decode(_base64Image!))
                           : Container(),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Bounce(
                             onTap: () {
@@ -224,115 +240,117 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: 10.w,
                           ),
-                          Row(
-                            children: [
-                              Bounce(
-                                onTap: () {},
-                                child: Container(
-                                    height: 70.h,
-                                    width: 170.w,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: deepblue, width: 1),
-                                        color: backgroundColor,
-                                        borderRadius:
-                                            BorderRadius.circular(30.r)),
-                                    child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15.w, vertical: 20.h),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 20.w,
-                                            ),
-                                            Text(
-                                              "Style",
-                                              style: TextStyle(
-                                                  fontSize: 15.sp,
-                                                  color: rabbitWhite,
-                                                  fontWeight: FontWeight.w300,
-                                                  fontFamily: 'Helvetica'),
-                                            ),
-                                            SizedBox(
-                                              width: 50.w,
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Icon(
-                                                Icons.add,
-                                                color: santasGray,
-                                                size: 23.sp,
-                                              ),
-                                            ),
-                                          ],
-                                        ))),
-                              ),
-                            ],
-                          )
+                          // Row(
+                          //   children: [
+                          //     Bounce(
+                          //       onTap: () {
+                          //         Get.to(() => StylePage());
+                          //       },
+                          //       child: Container(
+                          //           height: 70.h,
+                          //           width: 170.w,
+                          //           decoration: BoxDecoration(
+                          //               border: Border.all(
+                          //                   color: deepblue, width: 1),
+                          //               color: backgroundColor,
+                          //               borderRadius:
+                          //                   BorderRadius.circular(30.r)),
+                          //           child: Padding(
+                          //               padding: EdgeInsets.symmetric(
+                          //                   horizontal: 15.w, vertical: 20.h),
+                          //               child: Row(
+                          //                 children: [
+                          //                   SizedBox(
+                          //                     width: 20.w,
+                          //                   ),
+                          //                   Text(
+                          //                     "Style",
+                          //                     style: TextStyle(
+                          //                         fontSize: 15.sp,
+                          //                         color: rabbitWhite,
+                          //                         fontWeight: FontWeight.w300,
+                          //                         fontFamily: 'Helvetica'),
+                          //                   ),
+                          //                   SizedBox(
+                          //                     width: 50.w,
+                          //                   ),
+                          //                   Align(
+                          //                     alignment: Alignment.centerRight,
+                          //                     child: Icon(
+                          //                       Icons.add,
+                          //                       color: santasGray,
+                          //                       size: 23.sp,
+                          //                     ),
+                          //                   ),
+                          //                 ],
+                          //               ))),
+                          //     ),
+                          //   ],
+                          // )
                         ],
                       ),
                       SizedBox(
                         height: 20.h,
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 180.w,
-                          ),
-                          Bounce(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AdvancedScreen()));
-                            },
-                            child: Row(
-                              children: [
-                                Container(
-                                    height: 70.h,
-                                    width: 170.w,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: deepblue, width: 1),
-                                        color: backgroundColor,
-                                        borderRadius:
-                                            BorderRadius.circular(30.r)),
-                                    child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15.w, vertical: 20.h),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 20.w,
-                                            ),
-                                            Text(
-                                              "Advanced",
-                                              style: TextStyle(
-                                                  fontSize: 15.sp,
-                                                  color: rabbitWhite,
-                                                  fontWeight: FontWeight.w300,
-                                                  fontFamily: 'Helvetica'),
-                                            ),
-                                            SizedBox(
-                                              width: 20.w,
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Icon(
-                                                Icons
-                                                    .keyboard_arrow_down_outlined,
-                                                color: santasGray,
-                                                size: 23.sp,
-                                              ),
-                                            ),
-                                          ],
-                                        ))),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     SizedBox(
+                      //       width: 180.w,
+                      //     ),
+                      //     Bounce(
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) =>
+                      //                     const AdvancedScreen()));
+                      //       },
+                      //       child: Row(
+                      //         children: [
+                      //           Container(
+                      //               height: 70.h,
+                      //               width: 170.w,
+                      //               decoration: BoxDecoration(
+                      //                   border: Border.all(
+                      //                       color: deepblue, width: 1),
+                      //                   color: backgroundColor,
+                      //                   borderRadius:
+                      //                       BorderRadius.circular(30.r)),
+                      //               child: Padding(
+                      //                   padding: EdgeInsets.symmetric(
+                      //                       horizontal: 15.w, vertical: 20.h),
+                      //                   child: Row(
+                      //                     children: [
+                      //                       SizedBox(
+                      //                         width: 20.w,
+                      //                       ),
+                      //                       Text(
+                      //                         "Advanced",
+                      //                         style: TextStyle(
+                      //                             fontSize: 15.sp,
+                      //                             color: rabbitWhite,
+                      //                             fontWeight: FontWeight.w300,
+                      //                             fontFamily: 'Helvetica'),
+                      //                       ),
+                      //                       SizedBox(
+                      //                         width: 20.w,
+                      //                       ),
+                      //                       Align(
+                      //                         alignment: Alignment.centerRight,
+                      //                         child: Icon(
+                      //                           Icons
+                      //                               .keyboard_arrow_down_outlined,
+                      //                           color: santasGray,
+                      //                           size: 23.sp,
+                      //                         ),
+                      //                       ),
+                      //                     ],
+                      //                   ))),
+                      //         ],
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                       SizedBox(
                         height: 20.h,
                       ),

@@ -5,6 +5,7 @@ import 'package:aakar_ai/app/home/controller/textfeild_controller.dart';
 import 'package:aakar_ai/app/home/view/pages/advanced_screen.dart';
 import 'package:aakar_ai/app/home/view/pages/home.dart';
 import 'package:aakar_ai/app/home/view/pages/prompt_screen.dart';
+import 'package:aakar_ai/app/home/view/pages/result_screen.dart';
 import 'package:aakar_ai/app/home/view/pages/style_page.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_appbar.dart';
 import 'package:aakar_ai/app/profile/view/widgets/custom_button.dart';
@@ -36,8 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Load saved prompt if it exists
-    _promptController.text = box.read('prompt') ?? '';
   }
 
   void dispose() {
@@ -47,11 +46,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<String> prompts = [
-    "A highly detailed and photorealistic portrait of a young girl with curly blue hair, bright blue eyes, and freckles. She has a gentle and serene expression, set against a softly blurred background. The lighting is warm and natural, emphasizing her features and giving the image a dreamy, artistic quality.",
-    "A futuristic city skyline at sunset, with neon lights reflecting on the glass buildings. The sky is painted in shades of orange, pink, and purple, giving the scene a cyberpunk aesthetic.",
-    "A mystical forest filled with glowing mushrooms and fireflies. A small wooden bridge crosses a crystal-clear stream, and the scene has a magical, fairytale-like atmosphere.",
-    "A warrior in golden armor standing on a battlefield at dawn, holding a massive sword. The sunlight glistens off their armor as they prepare for an epic battle.",
-    "A cat wearing steampunk goggles sitting on top of a flying airship, surrounded by floating islands in a sky filled with fluffy clouds."
+    "A majestic dragon with shimmering emerald scales soaring over a medieval castle, with the sun setting behind the mountains.",
+    "A futuristic astronaut exploring an alien planet with bioluminescent plants and a glowing blue river under a starry sky.",
+    "A cozy cabin in the middle of a snowy forest, with warm light glowing from the windows and smoke rising from the chimney.",
+    "A cybernetic samurai standing in the rain under neon lights, gripping a high-tech katana with a determined expression.",
+    "A giant octopus wrapping its tentacles around a sunken pirate ship in the deep ocean, with beams of light filtering through the water.",
+    "An enchanted library with floating books, glowing runes on the walls, and a wise old owl perched on a wooden stand.",
+    "A post-apocalyptic city overgrown with vines and trees, where nature has reclaimed the ruins of skyscrapers and highways.",
+    "A mystical sorceress casting a powerful spell in the middle of a storm, her robes flowing as lightning crackles around her.",
+    "A robotic dog with glowing eyes standing in a futuristic city, scanning its surroundings as flying cars zoom overhead.",
+    "A Viking warrior on a stormy sea, standing on a wooden ship with a massive axe, ready for battle as lightning flashes in the sky."
   ];
 
   void _setRandomPrompt() {
@@ -68,19 +72,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _generateImage() async {
     generatingController.generate();
     String? image = await ApiService.generateImage(_promptController.text);
+
     if (image != null) {
       setState(() {
         _base64Image = image;
       });
+
       String prompt = _promptController.text.trim();
       if (prompt.isNotEmpty) {
         List<String> prompts = box.read<List>('prompts')?.cast<String>() ?? [];
         prompts.add(prompt);
         box.write('prompts', prompts);
-        _promptController.clear();
-        generatingController.isLoading.value = false;
       }
+
+      generatingController.isLoading.value = false;
+      Get.to(() => Result(base64Image: _base64Image, prompt: prompt));
     } else {
+      generatingController.isLoading.value = false;
       Get.snackbar(
         "Error",
         "Failed to generate image",
@@ -106,7 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       );
-      generatingController.isLoading.value = false;
     }
   }
 
@@ -195,9 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 30.h,
                       ),
-                      _base64Image != null
-                          ? Image.memory(base64Decode(_base64Image!))
-                          : Container(),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [

@@ -6,12 +6,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.aakar_ai"
+    namespace "com.example.aakar_ai"
      compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 kotlinOptions {

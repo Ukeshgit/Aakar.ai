@@ -21,7 +21,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
 
   List<Map<String, String>> imageList = [
     {"id": "1", "image_path": "assets/images/carousel1.jpg"},
-    {"id": "2", "image_path": "assets/images/carousel2.png"},
+    {"id": "2", "image_path": "assets/images/carousel2.jpg"},
     {"id": "3", "image_path": "assets/images/carousel3.jpg"},
   ];
 
